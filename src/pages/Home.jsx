@@ -105,6 +105,7 @@ const Home = () => {
                   return (
                     <div className="article">
                       {/* Pass article data to news component */}
+                      {article.title}
                       <News key={index} article={article} />
                     </div>
                   );
