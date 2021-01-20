@@ -11,7 +11,7 @@ const Home = () => {
   // Query Covid Related News
   const { data: news } = useQuery("news", async () => {
     return await fetch(
-      `http://newsapi.org/v2/top-headlines?country=ph&category=health&q=covid&apiKey=${process.env.NEWS_API}`
+      `http://newsapi.org/v2/top-headlines?country=ph&category=health&q=covid&apiKey=a6bd545bba8546168ab4f77670dbd9f3`
     ).then((res) => res.json());
   });
 
