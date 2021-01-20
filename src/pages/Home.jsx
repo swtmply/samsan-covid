@@ -1,10 +1,13 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import moment from "moment";
 
 import News from "../components/News";
 
 const Home = () => {
+  // news state
+  const [newsState, setNewsState] = useState([]);
+
   // Query Covid Data API
   const { data, isLoading, error } = useQuery("covidData", async () => {
     return await fetch(
@@ -13,11 +16,20 @@ const Home = () => {
   });
 
   // Query Covid Related News
-  const { data: news, isLoading: newsLoading } = useQuery("news", async () => {
+  const { data: news } = useQuery("news", async () => {
     return await fetch(
       "http://newsapi.org/v2/top-headlines?country=ph&category=health&q=covid&apiKey=a6bd545bba8546168ab4f77670dbd9f3"
     ).then((res) => res.json());
   });
+
+  useEffect(() => {
+    if (news)
+      setNewsState(
+        news.articles.map((article, index) => {
+          if (index < 4) return article;
+        })
+      );
+  }, [news]);
 
   // Check Queries
   if (isLoading) return <div>Loading...</div>;
@@ -88,17 +100,15 @@ const Home = () => {
             </div>
             <div className="articles">
               {/* Check if Query of News API is loading */}
-              {newsLoading
-                ? null
-                : news.articles.map((article, index) => {
-                    if (index < 4)
-                      return (
-                        <div className="article">
-                          {/* Pass article data to news component */}
-                          <News key={index} article={article} />
-                        </div>
-                      );
-                  })}
+              {newsState.map((article, index) => {
+                if (index < 4)
+                  return (
+                    <div className="article">
+                      {/* Pass article data to news component */}
+                      <News key={index} article={article} />
+                    </div>
+                  );
+              })}
             </div>
           </div>
         </div>
