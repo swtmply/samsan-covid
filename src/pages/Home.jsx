@@ -8,17 +8,17 @@ const Home = () => {
   // news state
   const [newsState, setNewsState] = useState([]);
 
+  // Query Covid Related News
+  const { data: news } = useQuery("news", async () => {
+    return await fetch(
+      `http://newsapi.org/v2/top-headlines?country=ph&category=health&q=covid&apiKey=${process.env.NEWS_API}`
+    ).then((res) => res.json());
+  });
+
   // Query Covid Data API
   const { data, isLoading, error } = useQuery("covidData", async () => {
     return await fetch(
       "https://api.apify.com/v2/key-value-stores/lFItbkoNDXKeSWBBA/records/LATEST?disableRedirect=true"
-    ).then((res) => res.json());
-  });
-
-  // Query Covid Related News
-  const { data: news } = useQuery("news", async () => {
-    return await fetch(
-      "http://newsapi.org/v2/top-headlines?country=ph&category=health&q=covid&apiKey=a6bd545bba8546168ab4f77670dbd9f3"
     ).then((res) => res.json());
   });
 
@@ -105,7 +105,6 @@ const Home = () => {
                   return (
                     <div className="article">
                       {/* Pass article data to news component */}
-                      {article.title}
                       <News key={index} article={article} />
                     </div>
                   );
